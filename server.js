@@ -21,7 +21,7 @@ if (!fs.existsSync(TRADES_FILE) || fs.readFileSync(TRADES_FILE, 'utf8').trim() =
 }
 
 // Endpoint GET /trades: Returnează toate trade-urile din JSON
-app.get('/trades', (req, res) => {
+app.get('/trades', function(req, res) {
   try {
     const trades = fs.readJsonSync(TRADES_FILE);
     res.json(trades);
@@ -32,7 +32,7 @@ app.get('/trades', (req, res) => {
 });
 
 // Endpoint POST /trades: Adaugă un nou trade și salvează în JSON
-app.post('/trades', (req, res) => {
+app.post('/trades', function(req, res) {
   try {
     const newTrade = req.body;
     const trades = fs.readJsonSync(TRADES_FILE);
@@ -46,6 +46,6 @@ app.post('/trades', (req, res) => {
 });
 
 // Pornim serverul
-app.listen(PORT, => {
+app.listen(PORT, function() {
   console.log(`Server rulat pe portul ${PORT}`);
 });
