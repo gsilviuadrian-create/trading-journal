@@ -1,1 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Journal</title>
+  <!-- Tailwind CSS CDN pentru stilizare simplă și responsive -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN pentru grafice animate -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Font Roboto pentru un look modern sans-serif -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Roboto', sans-serif; }
+  </style>
+</head>
+<body class="bg-white text-gray-800">
+  <!-- Header minimalist -->
+  <header class="bg-gray-800 text-white p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">Trading Journal</h1>
+    <button id="addTradeBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Adăugare Trade</button>
+  </header>
 
+  <!-- Formular pentru adăugare trade (ascuns inițial, arătat la click) -->
+  <div id="tradeForm" class="hidden bg-gray-100 p-6 m-4 rounded-lg shadow">
+    <h2 class="text-lg font-bold mb-4">Adăugare Trade Nou</h2>
+    <form id="tradeFormElement">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="date" id="date" placeholder="Data" class="border p-2 rounded" required>
+        <input type="text" id="instrument" placeholder="Instrument (ex. EUR/USD)" class="border p-2 rounded" required>
+        <input type="number" id="entryPrice" placeholder="Preț Entry" class="border p-2 rounded" required step="0.01">
+        <input type="number" id="exitPrice" placeholder="Preț Exit" class="border p-2 rounded" required step="0.01">
+        <input type="number" id="volume" placeholder="Volum" class="border p-2 rounded" required step="0.01">
+        <select id="strategy" class="border p-2 rounded" required>
+          <option value="">Strategie</option>
+          <option value="Scalping">Scalping</option>
+          <option value="Swing">Swing</option>
+          <option value="Day Trading">Day Trading</option>
+        </select>
+        <input type="text" id="emotions" placeholder="Emoții (text liber)" class="border p-2 rounded">
+      </div>
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-4">Salvează Trade</button>
+    </form>
+  </div>
+
+  <!-- Dashboard cu statistici (card-uri responsive) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 m-4">
+    <div class="bg-gray-100 p-4 rounded shadow">
+      <h3 class="font-bold">Win Rate</h3>
+      <p id="winRate" class="text-2xl text-blue-500">0%</p>
+    </div>
+    <div class="bg-gray-100 p-4 rounded shadow">
+      <h3 class="font-bold">Profit Total</h3>
+      <p id="totalProfit" class="text-2xl text-green-500">$0</p>
+    </div>
+    <div class="bg-gray-100 p-4 rounded shadow">
+      <h3 class="font-bold">Profit Mediu</h3>
+      <p id="avgProfit" class="text-2xl text-green-500">$0</p>
+    </div>
+    <div class="bg-gray-100 p-4 rounded shadow">
+      <h3 class="font-bold">Drawdown Maxim</h3>
+      <p id="maxDrawdown" class="text-2xl text-red-500">$0</p>
+    </div>
+    <div class="bg-gray-100 p-4 rounded shadow">
+      <h3 class="font-bold">Total Trade-uri</h3>
+      <p id="totalTrades" class="text-2xl">0</p>
+    </div>
+  </div>
+
+  <!-- Grafice (canvas-uri pentru Chart.js, animate implicit) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 m-4">
+    <div class="bg-white p-4 rounded shadow">
+      <canvas id="cumulativeProfitChart"></canvas>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <canvas id="strategyPerformanceChart"></canvas>
+    </div>
+    <div class="bg-white p-4 rounded shadow">
+      <canvas id="profitDistributionChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Filtre și Tabel trade-uri -->
+  <div class="m-4">
+    <div class="flex flex-col md:flex-row gap-4 mb-4">
+      <select id="strategyFilter" class="border p-2 rounded">
+        <option value="">Toate Strategiile</option>
+        <option value="Scalping">Scalping</option>
+        <option value="Swing">Swing</option>
+        <option value="Day Trading">Day Trading</option>
+      </select>
+      <input type="date" id="dateFilter" class="border p-2 rounded">
+      <input type="text" id="instrumentFilter" placeholder="Instrument" class="border p-2 rounded">
+      <button id="exportBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Export CSV</button>
+    </div>
+    <table id="tradesTable" class="w-full border-collapse">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border p-2">Data</th>
+          <th class="border p-2">Instrument</th>
+          <th class="border p-2">Entry</th>
+          <th class="border p-2">Exit</th>
+          <th class="border p-2">Volum</th>
+          <th class="border p-2">Profit/Loss</th>
+          <th class="border p-2">Strategie</th>
+          <th class="border p-2">Emoții</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
