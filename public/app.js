@@ -1,5 +1,5 @@
-
 let trades = [];
+let previousWinRate = 0;
 
 // Funcție pentru a încărca trade-urile de pe server
 function loadTrades() {
@@ -15,11 +15,10 @@ function loadTrades() {
 // Funcție pentru a actualiza tabelul și statisticile
 function updateTableAndStats() {
     const tableBody = document.querySelector('#tradesTable tbody');
-    tableBody.innerHTML = ''; // Golește tabelul
+    tableBody.innerHTML = '';
     let totalProfit = 0;
     let winCount = 0;
 
-    // Completează tabelul cu trade-uri
     trades.forEach(trade => {
         const row = tableBody.insertRow();
         row.insertCell(0).textContent = trade.Data || '';
@@ -35,13 +34,16 @@ function updateTableAndStats() {
         if (parseFloat(trade['Profit/Loss']) > 0) winCount++;
     });
 
-    // Calculează și actualizează statisticile cu animație simplă
     const winRate = trades.length > 0 ? (winCount / trades.length * 100).toFixed(2) : 0;
-    animateValue('winRate', 0, winRate, 500); // Animație pentru Win Rate
-    animateValue('totalProfit', 0, totalProfit, 500, '$'); // Animație pentru Profit Total
-    animateValue('averageProfit', 0, trades.length > 0 ? (totalProfit / trades.length).toFixed(2) : 0, 500, '$'); // Animație pentru Profit Mediu
-    document.getElementById('maxDrawdown').textContent = '$0'; // De implementat mai târziu
-    document.getElementById('totalTrades').textContent = trades.length; // Fără animație pentru număr
+    animateValue('winRate', 0, winRate, 500); // Animație Win Rate
+    animateValue('totalProfit', 0, totalProfit, 500, '$'); // Animație Profit Total
+    animateValue('averageProfit', 0, trades.length > 0 ? (totalProfit / trades.length).toFixed(2) : 0, 500, '$'); // Animație Profit Mediu
+    document.getElementById('maxDrawdown').textContent = '$0'; // De implementat
+    document.getElementById('totalTrades').textContent = trades.length;
+
+    // Actualizează săgeata pentru Win Rate
+    updateWinRateArrow(winRate);
+    previousWinRate = winRate;
 }
 
 // Funcție pentru animație a valorilor
@@ -60,6 +62,21 @@ function animateValue(id, start, end, duration, prefix = '') {
         }
     };
     window.requestAnimationFrame(step);
+}
+
+// Funcție pentru a actualiza săgeata Win Rate
+function updateWinRateArrow(winRate) {
+    const arrow = document.getElementById('winRateArrow');
+    if (winRate > previousWinRate) {
+        arrow.textContent = '↑'; // Săgeată în sus
+        arrow.style.color = 'green';
+    } else if (winRate < previousWinRate) {
+        arrow.textContent = '↓'; // Săgeată în jos
+        arrow.style.color = 'red';
+    } else {
+        arrow.textContent = '→'; // Săgeată neutră
+        arrow.style.color = 'gray';
+    }
 }
 
 // Eveniment pentru submit-ul formularului
@@ -83,8 +100,8 @@ document.getElementById('tradeForm').addEventListener('submit', function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        loadTrades(); // Reîncarcă trade-urile
-        this.reset(); // Resetează formularul
+        loadTrades();
+        this.reset();
     })
     .catch(error => console.error('Eroare la salvarea trade-ului:', error));
 });
