@@ -1,7 +1,6 @@
 let trades = [];
 let previousWinRate = 0;
 
-// Funcție pentru a încărca trade-urile de pe server
 function loadTrades() {
     fetch('/trades')
         .then(response => response.json())
@@ -9,10 +8,9 @@ function loadTrades() {
             trades = data;
             updateTableAndStats();
         })
-        .catch(error => console.error('Eroare la încărcarea trade-urilor:', error));
+        .catch(error => console.error('Eroare:', error));
 }
 
-// Funcție pentru a actualiza tabelul și statisticile
 function updateTableAndStats() {
     const tableBody = document.querySelector('#tradesTable tbody');
     tableBody.innerHTML = '';
@@ -35,18 +33,15 @@ function updateTableAndStats() {
     });
 
     const winRate = trades.length > 0 ? (winCount / trades.length * 100).toFixed(2) : 0;
-    animateValue('winRate', 0, winRate, 500); // Animație Win Rate
-    animateValue('totalProfit', 0, totalProfit, 500, '$'); // Animație Profit Total
-    animateValue('averageProfit', 0, trades.length > 0 ? (totalProfit / trades.length).toFixed(2) : 0, 500, '$'); // Animație Profit Mediu
-    document.getElementById('maxDrawdown').textContent = '$0'; // De implementat
+    animateValue('winRate', 0, winRate, 500);
+    animateValue('totalProfit', 0, totalProfit, 500, '$');
+    animateValue('averageProfit', 0, trades.length > 0 ? (totalProfit / trades.length).toFixed(2) : 0, 500, '$');
+    document.getElementById('maxDrawdown').textContent = '$0';
     document.getElementById('totalTrades').textContent = trades.length;
 
-    // Actualizează săgeata pentru Win Rate
     updateWinRateArrow(winRate);
-    previousWinRate = winRate;
 }
 
-// Funcție pentru animație a valorilor
 function animateValue(id, start, end, duration, prefix = '') {
     let startTimestamp = null;
     const element = document.getElementById(id);
@@ -55,31 +50,31 @@ function animateValue(id, start, end, duration, prefix = '') {
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
         const value = start + (end - start) * progress;
         element.textContent = `${prefix}${value.toFixed(2)}`;
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        } else {
-            element.textContent = `${prefix}${end.toFixed(2)}`;
-        }
+        if (progress < 1) window.requestAnimationFrame(step);
+        else element.textContent = `${prefix}${end.toFixed(2)}`;
     };
     window.requestAnimationFrame(step);
 }
 
-// Funcție pentru a actualiza săgeata Win Rate
 function updateWinRateArrow(winRate) {
     const arrow = document.getElementById('winRateArrow');
+    if (!arrow) {
+        console.log('Eroare: Elementul winRateArrow nu există!');
+        return;
+    }
     if (winRate > previousWinRate) {
-        arrow.textContent = '↑'; // Săgeată în sus
+        arrow.textContent = '↑';
         arrow.style.color = 'green';
     } else if (winRate < previousWinRate) {
-        arrow.textContent = '↓'; // Săgeată în jos
+        arrow.textContent = '↓';
         arrow.style.color = 'red';
     } else {
-        arrow.textContent = '→'; // Săgeată neutră
+        arrow.textContent = '→';
         arrow.style.color = 'gray';
     }
+    previousWinRate = winRate;
 }
 
-// Eveniment pentru submit-ul formularului
 document.getElementById('tradeForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const newTrade = {
@@ -99,12 +94,9 @@ document.getElementById('tradeForm').addEventListener('submit', function(e) {
         body: JSON.stringify(newTrade)
     })
     .then(response => response.json())
-    .then(data => {
-        loadTrades();
-        this.reset();
-    })
-    .catch(error => console.error('Eroare la salvarea trade-ului:', error));
+    .then(data => loadTrades())
+    .catch(error => console.error('Eroare:', error));
+    this.reset();
 });
 
-// Încarcă trade-urile la start
 loadTrades();
