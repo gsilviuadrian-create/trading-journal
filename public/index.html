@@ -8,13 +8,13 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4; /* Fundal gri deschis */
+            background-color: #f4f4f4;
         }
         header {
             position: fixed;
             top: 0;
             width: 100%;
-            background-color: #2c3e50; /* Albastru închis */
+            background-color: #2c3e50;
             color: white;
             padding: 10px;
             text-align: right;
@@ -40,24 +40,36 @@
         }
         .stats {
             margin-bottom: 20px;
-            background-color: #fff; /* Fundal alb pentru statistici */
-            padding: 10px;
-            border-radius: 5px; /* Colțuri rotunjite */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Umbră ușoară */
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px; /* Colțuri mai rotunjite */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbră mai pronunțată */
+            transform: translateY(0); /* Efect de plutire */
+            transition: transform 0.3s ease; /* Animație la hover */
+        }
+        .stats:hover {
+            transform: translateY(-5px); /* Plutire la hover */
         }
         .stats div {
             display: inline-block;
             margin-right: 20px;
             font-weight: bold;
+            position: relative; /* Pentru săgeți */
+        }
+        .stats .arrow {
+            position: absolute;
+            left: 100%;
+            margin-left: 5px;
+            font-size: 12px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            background-color: #fff; /* Fundal alb pentru tabel */
-            border-radius: 5px; /* Colțuri rotunjite */
-            overflow: hidden; /* Asigură rotunjirea */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Umbră ușoară */
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         th, td {
             border: 1px solid #ddd;
@@ -65,19 +77,19 @@
             text-align: left;
         }
         th {
-            background-color: #3498db; /* Albastru deschis pentru header */
+            background-color: #3498db;
             color: white;
         }
         form {
             margin-top: 20px;
-            background-color: #fff; /* Fundal alb pentru formular */
+            background-color: #fff;
             padding: 15px;
-            border-radius: 5px; /* Colțuri rotunjite */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Umbră ușoară */
-            max-width: 300px; /* Lățime fixă pentru aliniere */
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
         }
         label {
-            display: block; /* Fiecare label pe o linie nouă */
+            display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
@@ -86,19 +98,19 @@
             padding: 5px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 4px; /* Colțuri rotunjite */
+            border-radius: 4px;
             box-sizing: border-box;
         }
         button {
             padding: 8px 15px;
-            background-color: #2ecc71; /* Verde pentru buton */
+            background-color: #2ecc71;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #27ae60; /* Verde mai închis la hover */
+            background-color: #27ae60;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -112,7 +124,7 @@
     </header>
     <div class="content">
         <div class="stats">
-            <div><strong>Win Rate:</strong> <span id="winRate">0%</span></div>
+            <div><strong>Win Rate:</strong> <span id="winRate">0%</span><span class="arrow" id="winRateArrow"></span></div>
             <div><strong>Profit Total:</strong> <span id="totalProfit">$0</span></div>
             <div><strong>Profit Mediu:</strong> <span id="averageProfit">$0</span></div>
             <div><strong>Drawdown Maxim:</strong> <span id="maxDrawdown">$0</span></div>
