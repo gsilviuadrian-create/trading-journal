@@ -18,23 +18,23 @@
             padding: 10px;
             text-align: right;
             z-index: 1000;
-            box-sizing: border-box; /* Asigură că padding-ul nu mărește lățimea */
+            box-sizing: border-box;
         }
         header span {
             margin-right: 20px;
-            white-space: nowrap; /* Previne tăierea textului */
+            white-space: nowrap;
         }
         header a {
             color: white;
             margin-left: 20px;
             text-decoration: none;
-            white-space: nowrap; /* Previne tăierea link-urilor */
+            white-space: nowrap;
         }
         header a:hover {
             text-decoration: underline;
         }
         .content {
-            margin-top: 60px; /* Spațiu sub header */
+            margin-top: 60px;
             padding: 20px;
         }
         .stats {
@@ -56,6 +56,19 @@
         }
         th {
             background-color: #f2f2f2;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input, select {
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+        button {
+            padding: 5px 10px;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -90,6 +103,17 @@
             </thead>
             <tbody></tbody>
         </table>
+        <form id="tradeForm">
+            <label>Data:</label><input type="date" id="date"><br>
+            <label>Instrument:</label><input type="text" id="instrument"><br>
+            <label>Entry:</label><input type="number" step="0.01" id="entry"><br>
+            <label>Exit:</label><input type="number" step="0.01" id="exit"><br>
+            <label>Volum:</label><input type="number" id="volume"><br>
+            <label>Profit/Loss:</label><input type="number" step="0.01" id="profitLoss"><br>
+            <label>Strategie:</label><input type="text" id="strategy"><br>
+            <label>Emotii:</label><input type="text" id="emotions"><br>
+            <button type="submit">Adaugă Trade</button>
+        </form>
     </div>
 </body>
 </html>
